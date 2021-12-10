@@ -1,0 +1,52 @@
+//
+// !!! WARNING !!! AUTO-GENERATED FILE!
+// PLEASE DO NOT MODIFY IT AND USE "platformio.ini":
+// https://docs.platformio.org/page/projectconf/section_env_build.html#build-flags
+//
+{
+    "configurations": [
+        {
+            "name": "PlatformIO",
+            "includePath": [
+                "/home/zaki/STM32CubeIDE/workspace_1.7.0/BlueDrone/Core/Inc",
+                "/home/zaki/STM32CubeIDE/workspace_1.7.0/BlueDrone/Core/Src",
+                "/home/zaki/STM32CubeIDE/workspace_1.7.0/BlueDrone/Core/Startup",
+                "/home/zaki/STM32CubeIDE/workspace_1.7.0/BlueDrone/Drivers/STM32F1xx_HAL_Driver/Inc",
+                "/home/zaki/STM32CubeIDE/workspace_1.7.0/BlueDrone/Drivers/STM32F1xx_HAL_Driver/Src",
+                "/home/zaki/STM32CubeIDE/workspace_1.7.0/BlueDrone/Drivers/CMSIS/Include",
+                "/home/zaki/STM32CubeIDE/workspace_1.7.0/BlueDrone/Drivers/CMSIS/Device/ST/STM32F1xx/Include",
+                "/home/zaki/.platformio/packages/tool-unity",
+                ""
+            ],
+            "browse": {
+                "limitSymbolsToIncludedHeaders": true,
+                "path": [
+                    "/home/zaki/STM32CubeIDE/workspace_1.7.0/BlueDrone/Core/Inc",
+                    "/home/zaki/STM32CubeIDE/workspace_1.7.0/BlueDrone/Core/Src",
+                    "/home/zaki/STM32CubeIDE/workspace_1.7.0/BlueDrone/Core/Startup",
+                    "/home/zaki/STM32CubeIDE/workspace_1.7.0/BlueDrone/Drivers/CMSIS/Include",
+                    "/home/zaki/STM32CubeIDE/workspace_1.7.0/BlueDrone/Drivers/CMSIS/Device/ST/STM32F1xx/Include",
+                    "/home/zaki/STM32CubeIDE/workspace_1.7.0/BlueDrone/Drivers/STM32F1xx_HAL_Driver/Inc",
+                    "/home/zaki/STM32CubeIDE/workspace_1.7.0/BlueDrone/Drivers/STM32F1xx_HAL_Driver/Src",
+                    "/home/zaki/.platformio/packages/tool-unity",
+                    ""
+                ]
+            },
+            "defines": [
+                "PLATFORMIO=50200",
+                "STM32F1",
+                "STM32F103xB",
+                "USE_HAL_DRIVER",
+                "F_CPU=72000000L",
+                ""
+            ],
+            "compilerPath": "/home/zaki/.platformio/packages/toolchain-gccarmnoneeabi/bin/arm-none-eabi-gcc",
+            "compilerArgs": [
+                "-mthumb",
+                "-mcpu=cortex-m3",
+                ""
+            ]
+        }
+    ],
+    "version": 4
+}

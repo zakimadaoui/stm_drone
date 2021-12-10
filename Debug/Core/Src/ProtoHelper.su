@@ -1,0 +1,7 @@
+ProtoHelper.cpp:9:1:ProtoHelper::ProtoHelper()	16	static
+ProtoHelper.cpp:11:1:ProtoHelper::~ProtoHelper()	24	static
+ProtoHelper.cpp:17:24:void __tcf_0()	8	static
+ProtoHelper.cpp:16:14:static ProtoHelper& ProtoHelper::getInstance()	8	static
+ProtoHelper.cpp:21:6:void ProtoHelper::setOnCommandRecievedCallabck(void (*)(Command*))	16	static
+ProtoHelper.cpp:27:6:void ProtoHelper::loadByte(char)	24	static
+ProtoHelper.cpp:104:6:void ProtoHelper::loadBytesFromBuffer(char*, uint8_t)	32	static

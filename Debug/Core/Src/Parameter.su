@@ -1,0 +1,10 @@
+Parameter.cpp:6:1:Parameter::Parameter(char*, uint8_t)	24	static
+Parameter.cpp:15:1:Parameter::~Parameter()	16	static
+Parameter.cpp:19:1:Parameter::Parameter(const Parameter&)	16	static
+Parameter.cpp:25:12:Parameter& Parameter::operator=(const Parameter&)	16	static
+Parameter.cpp:30:13:const char* Parameter::getStringValue()	16	static
+Parameter.cpp:34:6:char Parameter::getCharValue()	16	static
+Parameter.cpp:39:5:int Parameter::getIntValue()	24	static
+Parameter.cpp:51:7:float Parameter::getFloatValue()	24	static
+Parameter.cpp:57:6:long int Parameter::getLongValue()	24	static
+Parameter.cpp:63:8:double Parameter::getDoubleValue()	24	static

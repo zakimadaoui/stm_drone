@@ -1,0 +1,5 @@
+core_cm3.h:1511:22:__NVIC_EnableIRQ	16	static
+core_cm3.h:1639:22:__NVIC_SetPriority	16	static
+micros.c:11:6:micros_init	8	static
+micros.c:44:10:micros	4	static
+micros.c:48:6:TIM3_IRQHandler	4	static

@@ -1,0 +1,7 @@
+Command.cpp:5:1:Command::Command()	16	static
+Command.cpp:7:1:Command::~Command()	32	static
+Command.cpp:27:6:void Command::setCommandName(char*, uint8_t)	24	static
+Command.cpp:33:13:const char* Command::getCommandName()	16	static
+Command.cpp:37:6:char Command::getNameAsChar()	16	static
+Command.cpp:42:6:void Command::addParam(Parameter*)	16	static
+Command.cpp:48:12:Parameter* Command::getParam(uint8_t)	16	static
