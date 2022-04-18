@@ -16,10 +16,10 @@ extern "C" {
 #include "stm32f1xx.h"
 
 
-volatile static uint32_t uu_ticks = 0; //don't forget the "volatile" keyword !!!
+volatile static uint64_t uu_ticks = 0; //don't forget the "volatile" keyword !!!
 
 void micros_init(); //config and start timer for 1us ticks
-uint32_t micros(); //get the current tick (MAX is 1h and few mins currently !)
+uint64_t micros(); //get the current tick (MAX is 1h and few mins currently !)
 void TIM3_IRQHandler(void);
 
 #ifdef __cplusplus

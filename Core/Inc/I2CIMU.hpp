@@ -1,6 +1,7 @@
 #ifndef I2CIMU_H_
 #define I2CIMU_H_
 #include "stm32f1xx_hal.h"
+#include "stm32f1xx_hal_i2c.h"
 #include "math.h"
 
 #define MPU_ADDRESS 0xD0
@@ -10,7 +11,7 @@
 #define ACC_CONFIG_ADDRESS 0x1C
 #define ACC_DATA_START_ADDRESS  0x3B
 #define GYRO_DATA_START_ADDRESS  0x43
-#define GYRO_SCALE  10
+#define GYRO_SCALE  65.5
 #define I2C_TIMOUT  100
 class I2CIMU{
 
@@ -21,7 +22,7 @@ float             gyro_pitch_rate_pid = 0, gyro_roll_rate_pid = 0,
                   //filtered absolute angles
 float             angle_pitch, angle_roll; 
 
-//private:
+private:
 I2C_HandleTypeDef hi2c1;
 float             gyro_scale; 
 float             gyro_scale_pi; 
@@ -32,6 +33,7 @@ float             acc_axis[3]  = {0};
 float             acc_axis_cal[3]  = {0};
 float             acc_pitch,acc_roll,acc_total_vector;
 bool              gyro_angle_set = false;
+void              (*err_handler)(void);
 // float gyro_pitch,gyro_roll,gyro_yaw;
 
 
@@ -40,7 +42,9 @@ public:
 static I2CIMU&    getInstance();
 void              init(float controller_freq);
 void              updateData();
+void              reset();
 void              calibrateSensor(int cal_samples);
+void              setI2cErrorHandler(void (*err_handler)(void));
                   I2CIMU(I2CIMU& other) = delete; //Singletons should not be cloneable
 
 private:
@@ -51,11 +55,8 @@ void    initMPU6050();
 
 
 
-float ahh = 0;
-static void handle_i2c_error(){
-    // TODO: add LED notifs for I2C error
-//	while(1);
-	ahh = -7.7777;
+void I2CIMU::setI2cErrorHandler(void (*err_handler)(void)){
+    this->err_handler = err_handler;
 }
 
 I2CIMU::I2CIMU(){
@@ -67,8 +68,8 @@ I2CIMU& I2CIMU::getInstance(){
     return instance;
 }
 
+
 void I2CIMU::init(float controller_freq){
-    
     //init gyro scale
     gyro_scale  = 1.0f/(controller_freq *  GYRO_SCALE);
     gyro_scale_pi  = gyro_scale * M_PI / 180.0f; // scale gyro val, mult by dt and convert to radians
@@ -83,8 +84,8 @@ void I2CIMU::init(float controller_freq){
     hi2c1.Init.OwnAddress2 = 0;
     hi2c1.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
     hi2c1.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
-//    HAL_I2C_Init(&hi2c1);
-    if (HAL_I2C_Init(&hi2c1) != HAL_OK) handle_i2c_error();
+
+    HAL_I2C_Init(&hi2c1) ;
 
     // setup the MPU6050 by setting the control registers    
     uint8_t  mpu6050_config   = 0x03;
@@ -97,40 +98,47 @@ void I2CIMU::init(float controller_freq){
     //TODO: try other higher DLPF params for less noise
 	HAL_I2C_Mem_Write(&hi2c1, MPU_ADDRESS, MPU_CONFIG_ADDRRESS, 1, &mpu6050_config, 1, I2C_TIMOUT);
 	// configure the gyro, 
-    //TODO: experiment/calculate the right full scale range
 	HAL_I2C_Mem_Write(&hi2c1, MPU_ADDRESS, GYRO_CONFIG_ADDRESS, 1, &gyro_config, 1, I2C_TIMOUT);
 	// configure the accelerometer 
-    // TODO: experiment/calculate the right full scale range
-	HAL_I2C_Mem_Write(&hi2c1, MPU_ADDRESS, ACC_CONFIG_ADDRESS, 1, &acc_config, 1, I2C_TIMOUT);
+	if(
+    HAL_I2C_Mem_Write(&hi2c1, MPU_ADDRESS, ACC_CONFIG_ADDRESS, 1, &acc_config, 1, I2C_TIMOUT) != HAL_OK
+    ) err_handler(); // check last I2C write for timout errors
 
 }
 
+//reset all output vals to zero
+void I2CIMU::reset(){
+	angle_pitch = angle_roll =  0;
+	gyro_pitch_rate_pid = gyro_roll_rate_pid = gyro_yaw_rate_pid = 0;
+}
 
 void I2CIMU::calibrateSensor(int cal_samples){
     uint8_t gyro_data[6];
+
+    //reset cal vals in case this is another calibration
+	gyro_axis_cal[0] = gyro_axis_cal[1] = gyro_axis_cal[2] = 0 ;
+	acc_axis_cal[0] = acc_axis_cal[1] = acc_axis_cal[2] = 0 ;
+
+	//Accelerometer calibration
 	for (uint16_t i = 0; i < cal_samples; i++) {
-		ahh = i;
 		// read 6 bytes of data starting from GYRO_DATA_START_ADDRESS
 		HAL_I2C_Mem_Read(&hi2c1, MPU_ADDRESS, GYRO_DATA_START_ADDRESS, 1, gyro_data, 6, I2C_TIMOUT);
 		gyro_axis_cal[0] += (short)(gyro_data[0] << 8 | gyro_data[1]);
 		gyro_axis_cal[1] += (short)(gyro_data[2] << 8 | gyro_data[3]);
 		gyro_axis_cal[2] += (short)(gyro_data[4] << 8 | gyro_data[5]);
-        //TODO: add LEDs notification for calibration
 	}
 	gyro_axis_cal[0] = (int)((float) gyro_axis_cal[0] / cal_samples);
 	gyro_axis_cal[1] = (int)((float) gyro_axis_cal[1] / cal_samples);
 	gyro_axis_cal[2] = (int)((float) gyro_axis_cal[2] / cal_samples);
 
-
+	//Accelerometer calibration
     uint8_t acc_data[6];
 	for (uint16_t i = 0; i < cal_samples; i++) {
-		ahh = i;
 		// read 6 bytes of data starting from ACC_DATA_START_ADDRESS
 		HAL_I2C_Mem_Read(&hi2c1, MPU_ADDRESS, ACC_DATA_START_ADDRESS, 1, acc_data, 6, I2C_TIMOUT);
 		acc_axis_cal[0] += (short)(acc_data[0] << 8 | acc_data[1]);
 		acc_axis_cal[1] += (short)(acc_data[2] << 8 | acc_data[3]);
 		acc_axis_cal[2] += (short)(acc_data[4] << 8 | acc_data[5]);
-        //TODO: add LEDs notification for calibration
 	}
 	acc_axis_cal[0] = (int)((float) acc_axis_cal[0] / cal_samples);
 	acc_axis_cal[1] = (int)((float) acc_axis_cal[1] / cal_samples);
@@ -140,7 +148,15 @@ void I2CIMU::calibrateSensor(int cal_samples){
 void I2CIMU::updateData(void){
 
 	//read and store acc data, cast values to shorts since they are 16-bit 2's comp values
-	HAL_I2C_Mem_Read(&hi2c1, MPU_ADDRESS, ACC_DATA_START_ADDRESS,1, i2c_data, 14, I2C_TIMOUT);
+	if( HAL_I2C_Mem_Read(   &hi2c1, 
+                            MPU_ADDRESS, 
+                            ACC_DATA_START_ADDRESS,
+                            1,
+                            i2c_data,
+                            14, 
+                            I2C_TIMOUT) == HAL_OK)
+                            err_handler(); // check/handle last for timout errors
+
 	acc_axis[0] = (short)(i2c_data[0] << 8 | i2c_data[1]) ; //pitch
 	acc_axis[1] = (short)(i2c_data[2] << 8 | i2c_data[3]) ; //roll
 	acc_axis[2] = (short)(i2c_data[4] << 8 | i2c_data[5]) ; //yaw
@@ -148,7 +164,7 @@ void I2CIMU::updateData(void){
      //acc calibration.
      acc_axis[0] -= acc_axis_cal[0];  //Accelerometer calibration value for pitch.
      acc_axis[1] -= acc_axis_cal[1];   //Accelerometer calibration value for roll.
-    
+
 
 	// ignore temperature data
 
@@ -170,9 +186,11 @@ void I2CIMU::updateData(void){
     //integrate gyro
     angle_pitch += gyro_axis[0] * gyro_scale;      
     angle_roll  += gyro_axis[1] * gyro_scale;      
-    //If the IMU has yawed transfer the roll angle to the pitch angel and  the pitch angle to the roll angel
-    angle_pitch -= angle_roll * sin(gyro_axis[2] * gyro_scale_pi);  
-    angle_roll += angle_pitch * sin(gyro_axis[2] * gyro_scale_pi);  
+
+    // If the IMU has yawed transfer the roll angle to the pitch angel and  the pitch angle to the roll angel
+    // NOTE: this is disabled as it affects the drone badly
+    // angle_pitch -= angle_roll * sin(gyro_axis[2] * gyro_scale_pi);
+    // angle_roll += angle_pitch * sin(gyro_axis[2] * gyro_scale_pi);
 
 
     //Accelerometer angle calculations
@@ -186,6 +204,7 @@ void I2CIMU::updateData(void){
     }
   
     //Place the MPU-6050 spirit level and note the values in the following two lines for calibration.
+    //TODO: add acc calibrated angle_val here (so maybe run few cycles for this as well!)
     acc_pitch -= 0.0f;  //Accelerometer calibration value for pitch.
     acc_roll -= 0.0f;   //Accelerometer calibration value for roll.
     

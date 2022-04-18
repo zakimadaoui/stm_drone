@@ -1,35 +1,42 @@
 std_abs.h:75:3:constexpr float std::abs(float)	16	static
 cmath:106:3:constexpr float std::asin(float)	16	static
-cmath:425:3:constexpr float std::sin(float)	16	static
 cmath:463:3:constexpr float std::sqrt(float)	16	static
-I2CIMU.hpp:55:13:void handle_i2c_error()	4	static
-I2CIMU.hpp:61:1:I2CIMU::I2CIMU()	16	static
-I2CIMU.hpp:65:9:static I2CIMU& I2CIMU::getInstance()	8	static
-I2CIMU.hpp:70:6:void I2CIMU::init(float)	40	static
-I2CIMU.hpp:109:6:void I2CIMU::calibrateSensor(int)	80	static
-I2CIMU.hpp:140:6:void I2CIMU::updateData()	40	static
-ESC.hpp:23:1:ESC::ESC()	16	static
-ESC.hpp:27:6:static ESC& ESC::getInstance()	8	static
-ESC.hpp:32:13:void PWM_Error_Handler()	4	static,ignoring_inline_asm
-ESC.hpp:40:6:void ESC::init(int)	88	static
-ESC.hpp:91:6:void ESC::drive(uint16_t, uint16_t, uint16_t, uint16_t)	24	static
-PID.hpp:30:1:PID::PID(float, float, float, int)	24	static
-PID.hpp:37:6:void PID::setSetpoint(float)	16	static
-PID.hpp:41:7:float PID::feedback(float)	24	static
-PID.hpp:62:6:void PID::reset()	16	static
-main.cpp:97:6:void setup()	16	static
-main.cpp:153:5:int main()	48	static
-main.cpp:272:6:void SystemClock_Config()	72	static
-main.cpp:306:13:void MX_USART1_UART_Init()	8	static
-main.cpp:324:6:void HAL_UART_RxCpltCallback(UART_HandleTypeDef*)	16	static
-main.cpp:330:13:void MX_GPIO_Init()	40	static
-main.cpp:385:6:void HAL_GPIO_EXTI_Callback(uint16_t)	16	static
-main.cpp:391:13:void MX_ADC1_Init()	24	static
-main.cpp:411:6:void Error_Handler()	4	static
-main.cpp:418:6:void calibrateESCS()	16	static
-main.cpp:440:5:int constrainMotorVal(float)	16	static
-main.cpp:449:6:void init_battery()	8	static
-main.cpp:460:6:void read_battery_and_compensate(float&, float&, float&, float&)	40	static
-main.cpp:479:6:void commandCallback(Command*)	16	static
-main.cpp:548:1:void __static_initialization_and_destruction_0(int, int)	24	static
-main.cpp:548:1:cpp)	8	static
+I2CIMU.hpp:58:6:void I2CIMU::setI2cErrorHandler(void (*)())	16	static
+I2CIMU.hpp:62:1:I2CIMU::I2CIMU()	16	static
+I2CIMU.hpp:66:9:static I2CIMU& I2CIMU::getInstance()	8	static
+I2CIMU.hpp:72:6:void I2CIMU::init(float)	40	static
+I2CIMU.hpp:110:6:void I2CIMU::reset()	16	static
+I2CIMU.hpp:115:6:void I2CIMU::calibrateSensor(int)	80	static
+I2CIMU.hpp:148:6:void I2CIMU::updateData()	40	static
+ESC.hpp:25:1:ESC::ESC()	16	static
+ESC.hpp:29:6:static ESC& ESC::getInstance()	8	static
+ESC.hpp:34:7:void ESC::setEscErrorHandler(void (*)())	16	static
+ESC.hpp:38:6:void ESC::init(int)	88	static
+ESC.hpp:88:6:void ESC::drive(uint16_t, uint16_t, uint16_t, uint16_t)	24	static
+PID.hpp:38:1:PID::PID(float, float, float, int, float)	24	static
+PID.hpp:46:6:void PID::setSetpoint(float)	16	static
+PID.hpp:50:6:void PID::setProportional(float)	16	static
+PID.hpp:53:6:void PID::setIntegral(float)	16	static
+PID.hpp:56:6:void PID::setDerivative(float)	16	static
+PID.hpp:59:6:void PID::setTunings(float, float, float)	24	static
+PID.hpp:65:7:float PID::feedback(float)	24	static
+PID.hpp:95:6:void PID::reset()	16	static
+main.cpp:110:6:void setup()	8	static
+main.cpp:170:5:int main()	40	static
+main.cpp:293:6:void SystemClock_Config()	72	static
+main.cpp:326:13:void MX_USART1_UART_Init()	8	static
+main.cpp:344:6:void HAL_UART_RxCpltCallback(UART_HandleTypeDef*)	16	static
+main.cpp:351:13:void MX_GPIO_Init()	40	static
+main.cpp:405:6:void HAL_GPIO_EXTI_Callback(uint16_t)	16	static
+main.cpp:412:6:void calibrateESCS()	16	static
+main.cpp:437:5:int constrainMotorVal(float)	16	static
+main.cpp:446:6:void init_battery()	8	static
+main.cpp:457:6:void ADC_init()	32	static
+main.cpp:510:10:uint32_t ADC_read()	24	static
+main.cpp:524:6:void read_battery_and_compensate(float&, float&, float&, float&)	32	static
+main.cpp:553:6:void EscErrorHandler()	4	static
+main.cpp:558:6:void I2cErrorHandler()	4	static
+main.cpp:562:6:void AdcErrorHandler()	4	static
+main.cpp:568:6:void commandCallback(Command*)	104	static
+main.cpp:654:1:void __static_initialization_and_destruction_0(int, int)	24	static
+main.cpp:654:1:cpp)	8	static

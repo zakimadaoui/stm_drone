@@ -41,8 +41,14 @@ void micros_init(){
 
 }
 
-uint32_t micros(){
-	return uu_ticks;
+uint64_t micros(){
+    uint64_t temp_ticks;
+    //disable interrupts, store, and enable again to avoid racing conditions on the shared variable uu_ticks
+    disable_interrupts();
+    temp_ticks = uu_ticks;
+    enable_interrupts();
+	return temp_ticks;
+
 }
 
 void TIM3_IRQHandler(void){
@@ -50,6 +56,6 @@ void TIM3_IRQHandler(void){
 	if((TIM3->SR & TIM_SR_UIF_Msk) == TIM_SR_UIF_Msk){
 		// uu_ticks+=10; // increment each 10 Micro-seconds
 		uu_ticks+=4; // increment each 4 Micro-seconds
-		TIM3->SR &= ~TIM_SR_UIF_Msk;
+		TIM3->SR &= ~TIM_SR_UIF_Msk; //rest the flag
 	}
 }

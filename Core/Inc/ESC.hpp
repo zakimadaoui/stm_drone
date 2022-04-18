@@ -10,6 +10,7 @@ class ESC
 
 private:
 TIM_HandleTypeDef htim2;
+void (*err_handler)(void);// a fct pointer for err_handler that takes/returns no params
 
 private:
                 ESC();
@@ -18,6 +19,7 @@ static ESC&     getInstance();
 void            init(int init_speed);
 void            drive(uint16_t m1, uint16_t m2, uint16_t m3, uint16_t m4);
 ESC(ESC& other) = delete; //Singletons should not be cloneable
+void setEscErrorHandler(void (*err_handler)(void));
 };
 
 ESC::ESC(){
@@ -29,12 +31,8 @@ ESC& ESC::getInstance() {
     return _instance;
 }
 
-static void PWM_Error_Handler(){
-    //TODO: add LED notif error for ESC PWM
-    __disable_irq();
-  while (1)
-  {
-  }
+void  ESC::setEscErrorHandler(void (*err_handler)(void)){
+    this->err_handler = err_handler;
 }
 
 void ESC::init(int init_speed){
@@ -53,30 +51,30 @@ void ESC::init(int init_speed){
     htim2.Init.Period = 59999;
     htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
     htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
-    if (HAL_TIM_Base_Init(&htim2) != HAL_OK) PWM_Error_Handler();
+    if (HAL_TIM_Base_Init(&htim2) != HAL_OK) err_handler();
     
     sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
-    if (HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig) != HAL_OK) PWM_Error_Handler();
-    if (HAL_TIM_PWM_Init(&htim2) != HAL_OK) PWM_Error_Handler();
+    if (HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig) != HAL_OK) err_handler();
+    if (HAL_TIM_PWM_Init(&htim2) != HAL_OK) err_handler();
     
     sSlaveConfig.SlaveMode = TIM_SLAVEMODE_DISABLE;
     sSlaveConfig.InputTrigger = TIM_TS_ITR0;
-    if (HAL_TIM_SlaveConfigSynchro(&htim2, &sSlaveConfig) != HAL_OK) PWM_Error_Handler();
+    if (HAL_TIM_SlaveConfigSynchro(&htim2, &sSlaveConfig) != HAL_OK) err_handler();
     
     sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
     sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-    if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK) PWM_Error_Handler();
+    if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK) err_handler();
     
     sConfigOC.OCMode = TIM_OCMODE_PWM1;
     sConfigOC.Pulse = PWM_MIN;
     sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
     sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-    if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_1) != HAL_OK) PWM_Error_Handler();
+    if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_1) != HAL_OK) err_handler();
 
     sConfigOC.Pulse = init_speed; //PWM_MIN
-    if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_2) != HAL_OK) PWM_Error_Handler();
-    if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_3) != HAL_OK) PWM_Error_Handler();
-    if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_4) != HAL_OK) PWM_Error_Handler();
+    if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_2) != HAL_OK) err_handler();
+    if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_3) != HAL_OK) err_handler();
+    if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_4) != HAL_OK) err_handler();
     
     HAL_TIM_MspPostInit(&htim2);
     //=========================== HAL PWM CONFIG ==============================
@@ -84,7 +82,6 @@ void ESC::init(int init_speed){
     HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2);
     HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_3);
     HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_4);
-
 }
 
 

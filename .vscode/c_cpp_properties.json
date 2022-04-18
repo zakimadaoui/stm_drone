@@ -8,26 +8,26 @@
         {
             "name": "PlatformIO",
             "includePath": [
-                "/home/zaki/STM32CubeIDE/workspace_1.7.0/BlueDrone/Core/Inc",
-                "/home/zaki/STM32CubeIDE/workspace_1.7.0/BlueDrone/Core/Src",
-                "/home/zaki/STM32CubeIDE/workspace_1.7.0/BlueDrone/Core/Startup",
-                "/home/zaki/STM32CubeIDE/workspace_1.7.0/BlueDrone/Drivers/STM32F1xx_HAL_Driver/Inc",
-                "/home/zaki/STM32CubeIDE/workspace_1.7.0/BlueDrone/Drivers/STM32F1xx_HAL_Driver/Src",
-                "/home/zaki/STM32CubeIDE/workspace_1.7.0/BlueDrone/Drivers/CMSIS/Include",
-                "/home/zaki/STM32CubeIDE/workspace_1.7.0/BlueDrone/Drivers/CMSIS/Device/ST/STM32F1xx/Include",
+                "/home/zaki/Desktop/Current Projects/BlueDrone/Core/Inc",
+                "/home/zaki/Desktop/Current Projects/BlueDrone/Core/Src",
+                "/home/zaki/Desktop/Current Projects/BlueDrone/Core/Startup",
+                "/home/zaki/Desktop/Current Projects/BlueDrone/Drivers/STM32F1xx_HAL_Driver/Inc",
+                "/home/zaki/Desktop/Current Projects/BlueDrone/Drivers/STM32F1xx_HAL_Driver/Src",
+                "/home/zaki/Desktop/Current Projects/BlueDrone/Drivers/CMSIS/Include",
+                "/home/zaki/Desktop/Current Projects/BlueDrone/Drivers/CMSIS/Device/ST/STM32F1xx/Include",
                 "/home/zaki/.platformio/packages/tool-unity",
                 ""
             ],
             "browse": {
                 "limitSymbolsToIncludedHeaders": true,
                 "path": [
-                    "/home/zaki/STM32CubeIDE/workspace_1.7.0/BlueDrone/Core/Inc",
-                    "/home/zaki/STM32CubeIDE/workspace_1.7.0/BlueDrone/Core/Src",
-                    "/home/zaki/STM32CubeIDE/workspace_1.7.0/BlueDrone/Core/Startup",
-                    "/home/zaki/STM32CubeIDE/workspace_1.7.0/BlueDrone/Drivers/CMSIS/Include",
-                    "/home/zaki/STM32CubeIDE/workspace_1.7.0/BlueDrone/Drivers/CMSIS/Device/ST/STM32F1xx/Include",
-                    "/home/zaki/STM32CubeIDE/workspace_1.7.0/BlueDrone/Drivers/STM32F1xx_HAL_Driver/Inc",
-                    "/home/zaki/STM32CubeIDE/workspace_1.7.0/BlueDrone/Drivers/STM32F1xx_HAL_Driver/Src",
+                    "/home/zaki/Desktop/Current Projects/BlueDrone/Core/Inc",
+                    "/home/zaki/Desktop/Current Projects/BlueDrone/Core/Src",
+                    "/home/zaki/Desktop/Current Projects/BlueDrone/Core/Startup",
+                    "/home/zaki/Desktop/Current Projects/BlueDrone/Drivers/CMSIS/Include",
+                    "/home/zaki/Desktop/Current Projects/BlueDrone/Drivers/CMSIS/Device/ST/STM32F1xx/Include",
+                    "/home/zaki/Desktop/Current Projects/BlueDrone/Drivers/STM32F1xx_HAL_Driver/Inc",
+                    "/home/zaki/Desktop/Current Projects/BlueDrone/Drivers/STM32F1xx_HAL_Driver/Src",
                     "/home/zaki/.platformio/packages/tool-unity",
                     ""
                 ]
